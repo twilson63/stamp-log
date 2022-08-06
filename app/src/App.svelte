@@ -76,7 +76,7 @@
             <div class="card shadow-xl">
               <div class="card-body">
                 <div class="text-center">
-                  <img src="/onlyarweave-stamp.png" alt="onlyarweave-stamp" />
+                  <img src="onlyarweave-stamp.png" alt="onlyarweave-stamp" />
                 </div>
                 <a class="link" href="https://onlyarweave.com/stamp">
                   <h1 class="card-title">OnlyArweave/Stamps</h1>
@@ -86,7 +86,7 @@
             <div class="card shadow-xl">
               <div class="card-body">
                 <div class="text-center">
-                  <img src="/permapages-logo.svg" alt="permapages" />
+                  <img src="permapages-logo.svg" alt="permapages" />
                 </div>
                 <a class="link" href="https://pages.arweave.dev">
                   <h1 class="card-title">Permapages</h1>
