@@ -8,8 +8,11 @@
   });
   const { WarpWebFactory, LoggerFactory } = window.warp;
   LoggerFactory.INST.logLevel("error");
+
   const STAMPCOIN = "9nDWI3eHrMQbrfs9j8_YPfLbYJmBodgn7cBCG8bii4o";
   const warp = WarpWebFactory.memCached(arweave);
+  let defaultAvatarUrl =
+    "https://tgbcqufuppegmlhigt2zosiv2q55qty4t4rg2gebmfm4vpvf.arweave.net/mYIoULR7yGYs_6DT1_l0kV1DvYTxyfIm0YgWFZyr6l0";
 
   async function getStamps() {
     const { state } = await warp
@@ -30,6 +33,46 @@
       .readState();
 
     return state.title || "Unknown";
+  }
+
+  async function getProfile(addr) {
+    const query = (addr) => `query {
+  transactions(
+    first : 1,
+    owners: ["${addr}"],
+    tags: [
+      { name: "Protocol", values: ["PermaProfile-v0.1"]}
+    ]
+  ) {
+    edges {
+      node {
+        id
+        owner {
+          address
+        },
+        tags {
+          name
+          value
+        }
+      }
+    }
+  }
+}  
+`;
+    const result = await arweave.api.post("graphql", { query: query(addr) });
+    const edges = result?.data?.data?.transactions?.edges;
+    if (edges.length === 0)
+      return {
+        name: `${addr.substring(0, 2)}-${addr.substring(40)}`,
+        avatar: defaultAvatarUrl,
+      };
+    const { node } = edges[0];
+    const name =
+      node.tags.find((t) => t.name === "Profile-Name")?.value || "unknown";
+    const avatar =
+      node.tags.find((t) => t.name === "Profile-Avatar")?.value ||
+      defaultAvatarUrl;
+    return { name, avatar };
   }
 </script>
 
@@ -53,7 +96,7 @@
 <div class="flex-1 min-w-0 bg-white xl:flex">
   <!-- Account profile -->
   <div
-    class="xl:flex-shrink-0 xl:w-[300px] px-4 xl:border-r xl:border-gray-200 bg-white"
+    class="hidden xl:inline-block xl:flex-shrink-0 xl:w-[350px] px-4 xl:border-r xl:border-gray-200 bg-white"
   >
     <div class="pl-4 pr-6 py-6 sm:pl-6 lg:pl-8 xl:pl-0">
       <div class="flex items-center justify-between">
@@ -61,9 +104,9 @@
           <div
             class="space-y-8 sm:space-y-0 sm:flex sm:justify-between sm:items-center xl:block xl:space-y-8"
           >
-            <div class="card shadow-xl">
-              <div class="card-body">
-                <div class="text-center">
+            <div class="card shadow-xl w-[300px]">
+              <div class="card-body place-items-center">
+                <div class="">
                   <img
                     src="https://uortjlczjmucmpaqqhqm.supabase.co/storage/v1/object/public/firejet-converted-images/7426/ddcb48b641d6fde001952d6ac7d5ba12e6416768.webp"
                   />
@@ -73,8 +116,8 @@
                 </a>
               </div>
             </div>
-            <div class="card shadow-xl">
-              <div class="card-body">
+            <div class="card shadow-xl w-[300px]">
+              <div class="card-body place-items-center">
                 <div class="text-center">
                   <img src="onlyarweave-stamp.png" alt="onlyarweave-stamp" />
                 </div>
@@ -83,8 +126,8 @@
                 </a>
               </div>
             </div>
-            <div class="card shadow-xl">
-              <div class="card-body">
+            <div class="card shadow-xl w-[300px]">
+              <div class="card-body place-items-center">
                 <div class="text-center">
                   <img src="permapages-logo.svg" alt="permapages" />
                 </div>
@@ -182,7 +225,7 @@
       class="relative z-0 divide-y divide-gray-200 border-b border-gray-200"
     >
       {#await getStamps()}
-        <div class="alert alert-info">Loading stamps</div>
+        <div class="alert alert-info mx-16 my-8 w-11/12">Loading stamps</div>
       {:then stamps}
         {#each stamps as stamp}
           <li
@@ -272,7 +315,7 @@
               </div>
               <!-- Repo meta info -->
               <div
-                class="hidden sm:flex flex-col flex-shrink-0 items-end space-y-3"
+                class="hidden sm:flex flex-col flex-shrink-0 items-start w-[200px] space-y-3"
               >
                 <p class="flex items-center space-x-4">
                   <a
@@ -282,33 +325,23 @@
                   >
                     Visit site
                   </a>
-                  <button
-                    type="button"
-                    class="relative bg-white rounded-full focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
-                  >
-                    <span class="sr-only">Add to favorites</span>
-                    <!--
-                Heroicon name: solid/star
-
-                Starred: "text-yellow-300 hover:text-yellow-400", Not Starred: "text-gray-300 hover:text-gray-400"
-              -->
-                    <svg
-                      class="text-yellow-300 hover:text-yellow-400 h-5 w-5"
-                      xmlns="http://www.w3.org/2000/svg"
-                      viewBox="0 0 20 20"
-                      fill="currentColor"
-                      aria-hidden="true"
-                    >
-                      <path
-                        d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"
-                      />
-                    </svg>
-                  </button>
                 </p>
-                <p class="flex text-gray-500 text-sm space-x-2">
-                  <span>{stamp.address}</span>
-                  <span aria-hidden="true">&middot;</span>
+                <p
+                  class="flex items-center justify-start text-gray-500 text-sm space-x-[4px]"
+                >
+                  {#await getProfile(stamp.address)}
+                    finding profile...
+                  {:then profile}
+                    <img
+                      class="w-[16px] bg-black mask mask-circle"
+                      src={profile.avatar}
+                      alt={profile.name}
+                    />
+                    <span>{profile.name}</span>
+                  {/await}
                   <!--
+                  <span aria-hidden="true">&middot;</span>
+                  
                   <span>{formatDistanceToNow(new Date(stamp.timestamp))}</span>
                   -->
                 </p>
