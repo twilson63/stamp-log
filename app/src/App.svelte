@@ -1,5 +1,5 @@
 <script>
-  import { formatDistanceToNow } from "date-fns";
+  //import { formatDistanceToNow } from "date-fns";
 
   const arweave = Arweave.init({
     host: "arweave.net",
@@ -25,14 +25,20 @@
   }
 
   async function getTitle(contractId) {
-    const { state } = await warp
-      .contract(contractId)
-      .setEvaluationOptions({
-        allowUnsafeClient: true,
-      })
-      .readState();
-
-    return state.title || "Unknown";
+    const query = (txId) => `query {
+  transaction(id: "${txId}") {
+    tags {
+      name
+      value
+    }
+  }
+}
+`;
+    const result = await arweave.api.post("graphql", {
+      query: query(contractId),
+    });
+    const tags = result?.data?.data?.transaction?.tags;
+    return tags.find((t) => t.name === "Page-Title")?.value || "unknown";
   }
 
   async function getProfile(addr) {
@@ -251,7 +257,7 @@
                   </h2>
                 </div>
                 <a
-                  href="https://viewblock.io/arweave"
+                  href="https://viewblock.io/arweave/tx/{stamp.asset}"
                   class="relative group flex items-center space-x-2.5"
                 >
                   <figure class="w-[16px]">
