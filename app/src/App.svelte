@@ -1,5 +1,6 @@
 <script>
   //import { formatDistanceToNow } from "date-fns";
+  import Item from "./components/item.svelte";
 
   const arweave = Arweave.init({
     host: "arweave.net",
@@ -85,14 +86,7 @@
 <section class="hero bg-secondary text-secondary-content min-h-[200px]">
   <div class="hero-content flex-col lg:flex-row-reverse w-full">
     <h1 class="text-6xl font-bold flex justify-center items-center space-x-8">
-      Stamp Log
-      <figure class="p-8">
-        <img
-          src="https://tgbcqufuppegmlhigt2zosiv2q55qty4t4rg2gebmfm4vpvf.arweave.net/mYIoULR7yGYs_6DT1_l0kV1DvYTxyfIm0YgWFZyr6l0"
-          alt="arweave logo"
-          class="rounded-x1 h-[64px]"
-        />
-      </figure>
+      😸 MEME Exchange 😻
     </h1>
   </div>
 </section>
@@ -153,7 +147,7 @@
       class="pl-4 pr-6 pt-4 pb-4 border-b border-t border-gray-200 sm:pl-6 lg:pl-8 xl:pl-6 xl:pt-6 xl:border-t-0"
     >
       <div class="flex items-center">
-        <h1 class="flex-1 text-lg font-medium">Logs</h1>
+        <h1 class="flex-1 text-lg font-medium">Assets</h1>
         <div class="relative">
           <button
             type="button"
@@ -205,21 +199,21 @@
                 class="text-gray-700 block px-4 py-2 text-sm"
                 role="menuitem"
                 tabindex="-1"
-                id="sort-menu-item-0">Name</a
+                id="sort-menu-item-0">Recent</a
               >
               <a
                 href="#"
                 class="text-gray-700 block px-4 py-2 text-sm"
                 role="menuitem"
                 tabindex="-1"
-                id="sort-menu-item-1">Date modified</a
+                id="sort-menu-item-1">Least Expensive</a
               >
               <a
                 href="#"
                 class="text-gray-700 block px-4 py-2 text-sm"
                 role="menuitem"
                 tabindex="-1"
-                id="sort-menu-item-2">Date created</a
+                id="sort-menu-item-2">Most Expensive</a
               >
             </div>
           </div>
@@ -234,126 +228,7 @@
         <div class="alert alert-info mx-16 my-8 w-11/12">Loading stamps</div>
       {:then stamps}
         {#each stamps as stamp}
-          <li
-            class="relative pl-4 pr-6 py-5 hover:bg-gray-50 sm:py-6 sm:pl-6 lg:pl-8 xl:pl-6"
-          >
-            <div class="flex items-center justify-between space-x-4">
-              <!-- Repo name and link -->
-              <div class="min-w-0 space-y-3">
-                <div class="flex items-center space-x-3">
-                  <span
-                    class="h-4 w-4 bg-green-100 rounded-full flex items-center justify-center"
-                    aria-hidden="true"
-                  >
-                    <span class="h-2 w-2 bg-green-400 rounded-full" />
-                  </span>
-
-                  <h2 class="text-sm font-medium">
-                    <a href="#">
-                      <span class="absolute inset-0" aria-hidden="true" />
-                      {#await getTitle(stamp.asset) then title}{title}{/await}
-                      <span class="sr-only">Running</span>
-                    </a>
-                  </h2>
-                </div>
-                <a
-                  href="https://viewblock.io/arweave/tx/{stamp.asset}"
-                  class="relative group flex items-center space-x-2.5"
-                >
-                  <figure class="w-[16px]">
-                    <svg
-                      version="1.1"
-                      id="Layer_1"
-                      xmlns="http://www.w3.org/2000/svg"
-                      xmlns:xlink="http://www.w3.org/1999/xlink"
-                      x="0px"
-                      y="0px"
-                      viewBox="0 0 31.8 31.8"
-                      style="enable-background:new 0 0 31.8 31.8;"
-                      xml:space="preserve"
-                    >
-                      <style type="text/css">
-                        .st0 {
-                          fill: none;
-                          stroke: #222326;
-                          stroke-width: 2.5;
-                        }
-                        .st1 {
-                          fill: #222326;
-                        }
-                      </style>
-                      <circle class="st0" cx="15.9" cy="15.9" r="14.7" />
-                      <path
-                        class="st1"
-                        d="M18.7,21.2c-0.1-0.1-0.1-0.3-0.2-0.5c0-0.2-0.1-0.4-0.1-0.6c-0.2,0.2-0.4,0.3-0.6,0.5c-0.2,0.2-0.5,0.3-0.7,0.4
-                c-0.3,0.1-0.5,0.2-0.9,0.3c-0.3,0.1-0.7,0.1-1,0.1c-0.6,0-1.1-0.1-1.6-0.3c-0.5-0.2-0.9-0.4-1.3-0.7c-0.4-0.3-0.6-0.7-0.8-1.1
-                c-0.2-0.4-0.3-0.9-0.3-1.4c0-1.2,0.5-2.2,1.4-2.8c0.9-0.7,2.3-1,4.1-1h1.7v-0.7c0-0.6-0.2-1-0.5-1.3c-0.4-0.3-0.9-0.5-1.6-0.5
-                c-0.6,0-1,0.1-1.3,0.4c-0.3,0.3-0.4,0.6-0.4,1h-3c0-0.5,0.1-1,0.3-1.4c0.2-0.4,0.5-0.8,1-1.2c0.4-0.3,0.9-0.6,1.5-0.8
-                c0.6-0.2,1.3-0.3,2.1-0.3c0.7,0,1.3,0.1,1.9,0.3c0.6,0.2,1.1,0.4,1.6,0.8c0.4,0.3,0.8,0.8,1,1.3c0.2,0.5,0.4,1.1,0.4,1.8v5
-                c0,0.6,0,1.1,0.1,1.5c0.1,0.4,0.2,0.8,0.3,1v0.2H18.7z M15.8,19.1c0.3,0,0.6,0,0.8-0.1c0.3-0.1,0.5-0.2,0.7-0.3
-                c0.2-0.1,0.4-0.2,0.5-0.4c0.1-0.1,0.3-0.3,0.4-0.4v-2h-1.5c-0.5,0-0.9,0-1.2,0.1c-0.3,0.1-0.6,0.2-0.8,0.4c-0.2,0.2-0.4,0.3-0.5,0.6
-                c-0.1,0.2-0.1,0.5-0.1,0.7c0,0.4,0.1,0.7,0.4,1C14.8,19,15.3,19.1,15.8,19.1z"
-                      />
-                    </svg>
-                  </figure>
-                  <span
-                    class="text-sm text-gray-500 group-hover:text-gray-900 font-medium truncate"
-                  >
-                    {stamp.asset}
-                  </span>
-                </a>
-              </div>
-              <div class="sm:hidden">
-                <!-- Heroicon name: solid/chevron-right -->
-                <svg
-                  class="h-5 w-5 text-gray-400"
-                  xmlns="http://www.w3.org/2000/svg"
-                  viewBox="0 0 20 20"
-                  fill="currentColor"
-                  aria-hidden="true"
-                >
-                  <path
-                    fill-rule="evenodd"
-                    d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z"
-                    clip-rule="evenodd"
-                  />
-                </svg>
-              </div>
-              <!-- Repo meta info -->
-              <div
-                class="hidden sm:flex flex-col flex-shrink-0 items-start w-[200px] space-y-3"
-              >
-                <p class="flex items-center space-x-4">
-                  <a
-                    target="_blank"
-                    href="https://arweave.net/{stamp.asset}"
-                    class="relative text-sm text-gray-500 hover:text-gray-900 font-medium"
-                  >
-                    Visit site
-                  </a>
-                </p>
-                <p
-                  class="flex items-center justify-start text-gray-500 text-sm space-x-[4px]"
-                >
-                  {#await getProfile(stamp.address)}
-                    finding profile...
-                  {:then profile}
-                    <img
-                      class="w-[16px] bg-black mask mask-circle"
-                      src={profile.avatar}
-                      alt={profile.name}
-                    />
-                    <span>{profile.name}</span>
-                  {/await}
-                  <!--
-                  <span aria-hidden="true">&middot;</span>
-                  
-                  <span>{formatDistanceToNow(new Date(stamp.timestamp))}</span>
-                  -->
-                </p>
-              </div>
-            </div>
-          </li>
+          <Item {stamp} />
         {/each}
       {/await}
 
