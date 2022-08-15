@@ -15,12 +15,18 @@
     "https://tgbcqufuppegmlhigt2zosiv2q55qty4t4rg2gebmfm4vpvf.arweave.net/mYIoULR7yGYs_6DT1_l0kV1DvYTxyfIm0YgWFZyr6l0";
 
   async function getStamps() {
-    const { state } = await warp
-      .pst(STAMPCOIN)
-      .setEvaluationOptions({
-        allowUnsafeClient: true,
-      })
-      .readState();
+    const state = await fetch("https://stamp-cache.onrender.com")
+      .then((res) => res.json())
+      .catch((_) =>
+        warp
+          .pst(STAMPCOIN)
+          .setEvaluationOptions({
+            allowUnsafeClient: true,
+          })
+          .readState()
+          .then((result) => result.state)
+      );
+
     return Object.values(state.stamps).reverse();
   }
 
