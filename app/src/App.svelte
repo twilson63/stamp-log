@@ -1,6 +1,6 @@
 <script>
   //import { formatDistanceToNow } from "date-fns";
-
+  import { take } from "ramda";
   const arweave = Arweave.init({
     host: "arweave.net",
     port: 443,
@@ -9,13 +9,15 @@
   const { WarpWebFactory, LoggerFactory } = window.warp;
   LoggerFactory.INST.logLevel("error");
 
-  const STAMPCOIN = "9nDWI3eHrMQbrfs9j8_YPfLbYJmBodgn7cBCG8bii4o";
+  const STAMPCOIN = "aSMILD7cEJr93i7TAVzzMjtci_sGkXcWnqpDkG6UGcA";
   const warp = WarpWebFactory.memCached(arweave);
   let defaultAvatarUrl =
     "https://tgbcqufuppegmlhigt2zosiv2q55qty4t4rg2gebmfm4vpvf.arweave.net/mYIoULR7yGYs_6DT1_l0kV1DvYTxyfIm0YgWFZyr6l0";
 
   async function getStamps() {
-    const state = await fetch("https://stamp-cache.onrender.com")
+    const state = await fetch(
+      "https://cache.permapages.app/aSMILD7cEJr93i7TAVzzMjtci_sGkXcWnqpDkG6UGcA"
+    )
       .then((res) => res.json())
       .catch((_) =>
         warp
@@ -27,7 +29,7 @@
           .then((result) => result.state)
       );
 
-    return Object.values(state.stamps).reverse();
+    return take(25, Object.values(state.stamps).reverse());
   }
 
   async function getTitle(contractId) {
